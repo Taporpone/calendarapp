@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { normalize } from 'normalizr';
+import monthSchema from '../schema';
 
 export const FETCH_USERS = 'FETCH_USERS';
 export const FETCH_USERS_FULFILLED = 'FETCH_USERS_FULFILLED';
@@ -27,7 +29,12 @@ export function fetchUser(month, user) {
     return function (dispatch) {
         axios.get(`https://timesheet-staging-aurity.herokuapp.com/api/training/weeks/${month}/2017/${user}`)
             .then((res) => {
-                dispatch({ type: FETCH_USER_FULFILLED, payload: res.data.data})
+                const response = res.data;
+                const originalData = response.data;
+                const normalizedData = normalize(originalData,monthSchema);
+                console.log(normalizedData);
+
+                dispatch({ type: FETCH_USER_FULFILLED, payload: normalizedData.entities});
             })
             .catch((err) => {
                 dispatch({ type: FETCH_USER_REJECTED, payload: err})
