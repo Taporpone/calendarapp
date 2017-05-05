@@ -8,7 +8,6 @@ export const FETCH_USER = 'FETCH_USER';
 export const FETCH_USER_FULFILLED = 'FETCH_USER_FULFILLED';
 export const FETCH_USER_REJECTED = 'FETCH_USER_REJECTED';
 
-export const POST_WEEK = 'POST_WEEK';
 export const POST_WEEK_REJECTED = 'POST_WEEK_REJECTED';
 
 export function fetchUsers() {
