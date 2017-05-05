@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { fetchUsers, fetchUser, postWeek } from '../Actions/calendarApp_actions';
+import { fetchUsers, fetchUser, postWeek, currentMonth, currentUser } from '../Actions/calendarApp_actions';
 
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
@@ -11,13 +11,15 @@ class CalendarApp extends Component {
         super(props);
     }
     componentWillMount() {
+        const date = new Date();
         this.props.dispatch(fetchUsers());
+        this.props.dispatch(fetchUser(date.getMonth() + 1, 1))
     }
     render() {
         return (
             <div>
                 <div>
-                    <select>
+                    <select onChange={ event => this.props.dispatch(currentUser(event.target.value))}>
                         {this.props.users.map(user => {
                             return (
                                 <option key={user.id} value={user.id}>{user.username}</option>
@@ -40,7 +42,7 @@ class CalendarApp extends Component {
 const mapStateToProps = function (store) {
     return {
         users: store.calendarAppReducer.users,
-        selectedMonth: store.calendarAppReducer.selectedUser
+        selectedUser: store.calendarAppReducer.selectedUser
     };
 };
 
