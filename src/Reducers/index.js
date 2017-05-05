@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import calendarAppReducer from './calendar_reducer.js';
+import calendarAppReducer from './calendarApp_reducer.js';
 
 const reducers = combineReducers({
     calendarAppReducer
