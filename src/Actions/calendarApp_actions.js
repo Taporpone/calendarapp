@@ -3,12 +3,13 @@ import axios from 'axios';
 export const FETCH_USERS = 'FETCH_USERS';
 export const FETCH_USERS_FULFILLED = 'FETCH_USERS_FULFILLED';
 export const FETCH_USERS_REJECTED = 'FETCH_USERS_REJECTED';
-
 export const FETCH_USER = 'FETCH_USER';
 export const FETCH_USER_FULFILLED = 'FETCH_USER_FULFILLED';
 export const FETCH_USER_REJECTED = 'FETCH_USER_REJECTED';
-
 export const POST_WEEK_REJECTED = 'POST_WEEK_REJECTED';
+
+export const CURRENT_USER = 'CURRENT_USER';
+export const CURRENT_MONTH = 'CURRENT_MONTH';
 
 export function fetchUsers() {
     return function (dispatch) {
@@ -40,5 +41,19 @@ export function postWeek(week,approved, week_status){
             .catch((err) => {
                 dispatch({ type: POST_WEEK_REJECTED, payload: err});
             })
+    }
+}
+
+export function currentUser(id) {
+    return {
+        type: CURRENT_USER,
+        id
+    }
+}
+
+export function currentMonth(month){
+    return {
+        type: CURRENT_MONTH,
+        month
     }
 }

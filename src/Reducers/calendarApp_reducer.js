@@ -4,11 +4,15 @@ import { FETCH_USERS,
         FETCH_USER, 
         FETCH_USER_FULFILLED, 
         FETCH_USER_REJECTED, 
-        POST_WEEK_REJECTED } from '../Actions/calendarApp_actions';
+        POST_WEEK_REJECTED,
+        CURRENT_USER,
+        CURRENT_MONTH } from '../Actions/calendarApp_actions';
 
 const initialState = {
     users: [],
-    selectedUser: [], //TBU with FETCH_USER
+    selectedUser: [],
+    currentMonth: 10,
+    currentUser: 1,
     fetching: false,
     fetched: false,
     error: null
@@ -29,7 +33,11 @@ const calendarAppReducer = function (state = initialState, action){
         case FETCH_USER_REJECTED:
             return Object.assign({}, state, { fetching: false, error: action.payload })
         case POST_WEEK_REJECTED:
-            return Object.assign({}, state, {error: action.payload}) 
+            return Object.assign({}, state, {error: action.payload})
+        case CURRENT_USER:
+            return Object.assign({}, state, { currentUser: action.id})
+        case CURRENT_MONTH:
+            return Object.assign({}, state, {currentMonth: action.month})
         default:
             return state;
     }
