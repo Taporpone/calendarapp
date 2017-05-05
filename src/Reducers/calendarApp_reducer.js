@@ -4,7 +4,7 @@ import { FETCH_USERS,
         FETCH_USER, 
         FETCH_USER_FULFILLED, 
         FETCH_USER_REJECTED, 
-        POST_WEEK_REJECTED } from '../Actions/calendar_actions';
+        POST_WEEK_REJECTED } from '../Actions/calendarApp_actions';
 
 const initialState = {
     users: [],
