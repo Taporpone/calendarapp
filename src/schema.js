@@ -1,6 +1,8 @@
 import { schema } from 'normalizr';
 
-const day = new schema.Entity('days');
+const day = new schema.Entity('days', {}, {
+    idAttribute: 'day_number'
+});
 
 const week = new schema.Entity('weeks', {
     days_in_week: [day]

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { fetchUsers, fetchUser, postWeek, currentMonth, currentUser } from '../Actions/calendarApp_actions';
 
 import DayPicker from 'react-day-picker';
+import moment from 'moment';
 import 'react-day-picker/lib/style.css';
 
 class CalendarApp extends Component {
@@ -38,6 +39,19 @@ class CalendarApp extends Component {
                 <div>
                     <DayPicker
                         onMonthChange={month => this.props.dispatch(currentMonth(month.getMonth() + 1))}
+                        renderDay={day => {
+                            if(!this.props.selectedUser || !this.props.selectedUser.days){
+                                return <div><span>{day.getDay()}</span></div>
+                            }
+                            const dayOfMonth = moment(day).date();
+                            const { days } = this.props.selectedUser;
+                            const dayDetails = days[dayOfMonth];
+                            let formattedTime = '0:0';
+                            if (dayDetails && dayDetails.hours && dayDetails.minutes){
+                                formattedTime = `${dayDetails.hour}:${dayDetails.minutes}`;
+                            }
+                            return <div><span>{dayOfMonth}</span><br/><span>{formattedTime}</span></div>
+                        }}
                     />
                 </div>
                 <div>
