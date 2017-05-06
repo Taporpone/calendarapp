@@ -12,6 +12,7 @@ export const POST_WEEK_REJECTED = 'POST_WEEK_REJECTED';
 
 export const CURRENT_USER = 'CURRENT_USER';
 export const CURRENT_MONTH = 'CURRENT_MONTH';
+export const SELECTED_WEEK = 'SELECTED_WEEK';
 
 export function fetchUsers() {
     return function (dispatch) {
@@ -31,22 +32,22 @@ export function fetchUser(month, user) {
             .then((res) => {
                 const response = res.data;
                 const originalData = response.data;
-                const normalizedData = normalize(originalData,monthSchema);
+                const normalizedData = normalize(originalData, monthSchema);
                 console.log(normalizedData);
 
-                dispatch({ type: FETCH_USER_FULFILLED, payload: normalizedData.entities});
+                dispatch({ type: FETCH_USER_FULFILLED, payload: normalizedData.entities });
             })
             .catch((err) => {
-                dispatch({ type: FETCH_USER_REJECTED, payload: err})
+                dispatch({ type: FETCH_USER_REJECTED, payload: err })
             })
     }
 }
 
-export function postWeek(week,approved, week_status){
-    return function(dispatch) {
-        axios.post(`https://timesheet-staging-aurity.herokuapp.com/api/training/weeks/${week}/users/${approved}`, {status: week_status})
+export function postWeek(week, approved, week_status) {
+    return function (dispatch) {
+        axios.put(`https://timesheet-staging-aurity.herokuapp.com/api/training/weeks/${week}/users/${approved}`, { status: week_status })
             .catch((err) => {
-                dispatch({ type: POST_WEEK_REJECTED, payload: err});
+                dispatch({ type: POST_WEEK_REJECTED, payload: err });
             })
     }
 }
@@ -58,9 +59,16 @@ export function currentUser(id) {
     }
 }
 
-export function currentMonth(month){
+export function currentMonth(month) {
     return {
         type: CURRENT_MONTH,
         month
+    }
+}
+
+export function selectedWeek(week_id) {
+    return {
+        type: SELECTED_WEEK,
+        week_id
     }
 }
