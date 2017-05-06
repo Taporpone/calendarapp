@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { fetchUsers, fetchUser, postWeek, currentMonth, currentUser } from '../Actions/calendarApp_actions';
+import { fetchUsers, fetchUser, postWeek, currentMonth, currentUser, selectedWeek } from '../Actions/calendarApp_actions';
 
 import DayPicker from 'react-day-picker';
 import moment from 'moment';
@@ -30,7 +30,6 @@ class CalendarApp extends Component {
         }
     }
     handleDayClick(day) {
-        //Clicking day get to both return week and select whole week
         const momentDay = moment(day);
         let range = {
             from: momentDay.day('Monday').toDate(),
@@ -42,6 +41,11 @@ class CalendarApp extends Component {
                 to: moment(day).subtract(6, 'days').toDate()
             }
         }
+
+        const foundWeek = Object.values(this.props.selectedUser.weeks)
+            .find(week => week.days_in_week.some(day => day == momentDay.date()));
+        const weekId = foundWeek.week_id;
+        this.props.dispatch(selectedWeek(weekId));
         this.setState(range);
     }
     render() {
@@ -78,8 +82,12 @@ class CalendarApp extends Component {
                     />
                 </div>
                 <div>
-                    <button>Accept</button>
-                    <button>Reject</button>
+                    <button
+                        onClick={() => this.props.dispatch(postWeek(this.props.selectedWeek, 1, 'approved'))}
+                    >Accept</button>
+                    <button
+                        onClick={() => this.props.dispatch(postWeek(this.props.selectedWeek, 1, 'rejected'))}
+                    >Reject</button>
                 </div>
             </div>
         )
@@ -91,7 +99,8 @@ const mapStateToProps = function (store) {
         users: store.calendarAppReducer.users,
         selectedUser: store.calendarAppReducer.selectedUser,
         currentMonth: store.calendarAppReducer.currentMonth,
-        currentUser: store.calendarAppReducer.currentUser
+        currentUser: store.calendarAppReducer.currentUser,
+        selectedWeek: store.calendarAppReducer.selectedWeek
     };
 };
 
