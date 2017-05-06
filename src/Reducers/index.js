@@ -1,8 +1,11 @@
 import { combineReducers } from 'redux';
-import calendarAppReducer from './calendarApp_reducer.js';
+
+import apiCallsReducer from './apiCalls_reducer';
+import userOperationsReducer from './userOperations_reducer';
 
 const reducers = combineReducers({
-    calendarAppReducer
+    apiCallsReducer,
+    userOperationsReducer
 });
 
 export default reducers;

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { fetchUsers, fetchUser, postWeek, currentMonth, currentUser, selectedWeek } from '../Actions/calendarApp_actions';
+import { fetchUsers, fetchUser, postWeek } from '../Actions/apiCalls_actions.js';
+import { currentMonth, currentUser, selectedWeek } from '../Actions/userOperations_actions.js';
 
 import DayPicker from 'react-day-picker';
 import moment from 'moment';
@@ -24,9 +25,9 @@ class CalendarApp extends Component {
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.currentMonth !== this.props.currentMonth) {
-            this.props.dispatch(fetchUser(nextProps.currentMonth, this.props.currentUser))
+            this.props.dispatch(fetchUser(nextProps.currentMonth, this.props.currentUser));
         } else if (nextProps.currentUser !== this.props.currentUser) {
-            this.props.dispatch(fetchUser(this.props.currentMonth, nextProps.currentUser))
+            this.props.dispatch(fetchUser(this.props.currentMonth, nextProps.currentUser));
         }
     }
     handleDayClick(day) {
@@ -39,11 +40,11 @@ class CalendarApp extends Component {
             range = {
                 from: moment(day).toDate(),
                 to: moment(day).subtract(6, 'days').toDate()
-            }
+            };
         }
 
         const foundWeek = Object.values(this.props.selectedUser.weeks)
-            .find(week => week.days_in_week.some(day => day == momentDay.date()));
+            .find(week => week.days_in_week.some(day => day === momentDay.date()));
         const weekId = foundWeek.week_id;
         this.props.dispatch(selectedWeek(weekId));
         this.setState(range);
@@ -57,7 +58,7 @@ class CalendarApp extends Component {
                         {this.props.users.map(user => {
                             return (
                                 <option key={user.id} value={user.id}>{user.username}</option>
-                            )
+                            );
                         })}
                     </select>
                 </div>
@@ -68,7 +69,7 @@ class CalendarApp extends Component {
                         onDayClick={day => this.handleDayClick(day)}
                         renderDay={day => {
                             if (!this.props.selectedUser || !this.props.selectedUser.days) {
-                                return <div><span>{day.getDay()}</span></div>
+                                return <div><span>{day.getDay()}</span></div>;
                             }
                             const dayOfMonth = moment(day).date();
                             const { days } = this.props.selectedUser;
@@ -77,30 +78,30 @@ class CalendarApp extends Component {
                             if (dayDetails && dayDetails.hours && dayDetails.minutes) {
                                 formattedTime = `${dayDetails.hour}:${dayDetails.minutes}`;
                             }
-                            return <div><span>{dayOfMonth}</span><br /><span>{formattedTime}</span></div>
+                            return <div><span>{dayOfMonth}</span><br /><span>{formattedTime}</span></div>;
                         }}
                     />
                 </div>
                 <div>
                     <button
-                        onClick={() => this.props.dispatch(postWeek(this.props.selectedWeek, 1, 'approved'))}
+                        onClick={() => this.props.selectedWeek !== 0 ? this.props.dispatch(postWeek(this.props.selectedWeek, 1, 'approved')) : alert('Please pick a week to process')}
                     >Accept</button>
                     <button
-                        onClick={() => this.props.dispatch(postWeek(this.props.selectedWeek, 1, 'rejected'))}
+                        onClick={() => this.props.selectedWeek !== 0 ? this.props.dispatch(postWeek(this.props.selectedWeek, 1, 'rejected')) :  alert('Please pick a week to process')}
                     >Reject</button>
                 </div>
             </div>
-        )
+        );
     }
-};
+}
 
 const mapStateToProps = function (store) {
     return {
-        users: store.calendarAppReducer.users,
-        selectedUser: store.calendarAppReducer.selectedUser,
-        currentMonth: store.calendarAppReducer.currentMonth,
-        currentUser: store.calendarAppReducer.currentUser,
-        selectedWeek: store.calendarAppReducer.selectedWeek
+        users: store.apiCallsReducer.users,
+        selectedUser: store.apiCallsReducer.selectedUser,
+        currentMonth: store.userOperationsReducer.currentMonth,
+        currentUser: store.userOperationsReducer.currentUser,
+        selectedWeek: store.userOperationsReducer.selectedWeek
     };
 };
 
