@@ -4,14 +4,15 @@ import { connect } from 'react-redux';
 import { fetchUsers, fetchUser, postWeek } from '../Actions/apiCalls_actions.js';
 import { currentMonth, currentUser, selectedWeek } from '../Actions/userOperations_actions.js';
 
-import './CalendarApp.css';
-
 import DayPicker from 'react-day-picker';
 import moment from 'moment';
-import 'react-day-picker/lib/style.css';
 
 import Buttons from '../Presentation/Buttons';
 import UserSelect from '../Presentation/UserSelect';
+
+import './CalendarApp.css';
+import 'react-day-picker/lib/style.css';
+
 
 class CalendarApp extends Component {
     constructor(props) {
