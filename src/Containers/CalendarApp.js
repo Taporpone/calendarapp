@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { fetchUsers, fetchUser, postWeek } from '../Actions/apiCalls_actions.js';
 import { currentMonth, currentUser, selectedWeek } from '../Actions/userOperations_actions.js';
 
+import './CalendarApp.css';
+
 import DayPicker from 'react-day-picker';
 import moment from 'moment';
 import 'react-day-picker/lib/style.css';
@@ -15,7 +17,6 @@ class CalendarApp extends Component {
             from: null,
             to: null
         };
-        this.handleDayClick = this.handleDayClick.bind(this);
     }
     componentWillMount() {
         const date = new Date();
@@ -42,19 +43,25 @@ class CalendarApp extends Component {
                 to: moment(day).subtract(6, 'days').toDate()
             };
         }
-
         const foundWeek = Object.values(this.props.selectedUser.weeks)
             .find(week => week.days_in_week.some(day => day === momentDay.date()));
         const weekId = foundWeek.week_id;
         this.props.dispatch(selectedWeek(weekId));
         this.setState(range);
     }
+    processWeek(status) {
+        if (this.props.selectedWeek !== 0) {
+            this.props.dispatch(postWeek(this.props.selectedWeek, 1, status));
+        } else {
+            alert('Please pick a week to process');
+        }
+    }
     render() {
         const { from, to } = this.state;
         return (
-            <div>
-                <div>
-                    <select onChange={event => this.props.dispatch(currentUser(event.target.value))}>
+            <div className='wrapper'>
+                <div className='container-userSelect'>
+                    <select className='userSelect' onChange={event => this.props.dispatch(currentUser(event.target.value))}>
                         {this.props.users.map(user => {
                             return (
                                 <option key={user.id} value={user.id}>{user.username}</option>
@@ -82,13 +89,9 @@ class CalendarApp extends Component {
                         }}
                     />
                 </div>
-                <div>
-                    <button
-                        onClick={() => this.props.selectedWeek !== 0 ? this.props.dispatch(postWeek(this.props.selectedWeek, 1, 'approved')) : alert('Please pick a week to process')}
-                    >Accept</button>
-                    <button
-                        onClick={() => this.props.selectedWeek !== 0 ? this.props.dispatch(postWeek(this.props.selectedWeek, 1, 'rejected')) :  alert('Please pick a week to process')}
-                    >Reject</button>
+                <div className='container-buttons'>
+                    <button className='button' onClick={() => this.processWeek('accepted')}>Accept</button>
+                    <button className='button' onClick={() => this.processWeek('rejected')}>Reject</button>
                 </div>
             </div>
         );
