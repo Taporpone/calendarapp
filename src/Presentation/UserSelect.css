@@ -1,0 +1,15 @@
+.userSelect {
+    border: 0;
+    margin: 5px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #0091ea;
+    border-radius: 5px;
+    color: #ffffff;
+    padding: 6px 24px;
+}
+
+select option {
+    background-color: #ffffff;
+    color: #000000;
+}

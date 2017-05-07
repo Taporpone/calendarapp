@@ -10,6 +10,9 @@ import DayPicker from 'react-day-picker';
 import moment from 'moment';
 import 'react-day-picker/lib/style.css';
 
+import Buttons from '../Presentation/Buttons';
+import UserSelect from '../Presentation/UserSelect';
+
 class CalendarApp extends Component {
     constructor(props) {
         super(props);
@@ -56,18 +59,15 @@ class CalendarApp extends Component {
             alert('Please pick a week to process');
         }
     }
+    switchUser(user) {
+        this.props.dispatch(currentUser(user));
+    }
     render() {
         const { from, to } = this.state;
         return (
             <div className='wrapper'>
                 <div className='container-userSelect'>
-                    <select className='userSelect' onChange={event => this.props.dispatch(currentUser(event.target.value))}>
-                        {this.props.users.map(user => {
-                            return (
-                                <option key={user.id} value={user.id}>{user.username}</option>
-                            );
-                        })}
-                    </select>
+                    <UserSelect users={this.props.users} onChange={this.switchUser.bind(this)} />
                 </div>
                 <div>
                     <DayPicker
@@ -90,8 +90,7 @@ class CalendarApp extends Component {
                     />
                 </div>
                 <div className='container-buttons'>
-                    <button className='button' onClick={() => this.processWeek('accepted')}>Accept</button>
-                    <button className='button' onClick={() => this.processWeek('rejected')}>Reject</button>
+                    <Buttons onClick={this.processWeek.bind(this)} />
                 </div>
             </div>
         );
